@@ -1,0 +1,8 @@
+/usr/bin/sombe-cli		--	gen_context(system_u:object_r:sombe_exec_t,s0)
+/usr/sbin/sombed		--	gen_context(system_u:object_r:sombe_exec_t,s0)
+/usr/lib(64)?/sombe/sombed		--	gen_context(system_u:object_r:sombe_exec_t,s0)
+
+/etc/sombe(/.*)?		gen_context(system_u:object_r:sombe_conf_t,s0)
+/var/lib/sombe(/.*)?		gen_context(system_u:object_r:sombe_var_lib_t,s0)
+
+(/var)?/run/sombed(/.*)?   gen_context(system_u:object_r:sombe_var_run_t,s0)
