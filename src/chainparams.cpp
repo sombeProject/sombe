@@ -56,6 +56,7 @@ static Checkpoints::MapCheckpoints mapCheckpoints =
     boost::assign::map_list_of
     (0, uint256("00000d95c26e83a822f36634e0a3b1c8e257407861d67382473e84198e900667"))
     (836, uint256("28c75fd65383bf03d492d570ed879bcb9af862e18fdd8e096d097532c7d019b5"))
+    (518500, uint256("f504b7d49d517a95460b423e224da3fc98305e1a5501ad19e3ba3f91d58c725c"))
     ;
 static const Checkpoints::CCheckpointData data = {
     &mapCheckpoints,
@@ -224,6 +225,10 @@ public:
         nZerocoinRequiredStakeDepth = 200; //The required confirmations for a zsombe to be stakable
 
         nBudget_Fee_Confirmations = 6; // Number of confirmations for the finalization fee
+        blacklistedAddresses = std::set<std::string>{
+            "ShfC5fVeWkLGSHqP8vYSTYF9pJY5u8coRB",
+            "SgW2C6tCQDNQD8yTszSPgByx5bNVEmBdJK",
+        };
     }
 
     const Checkpoints::CCheckpointData& Checkpoints() const

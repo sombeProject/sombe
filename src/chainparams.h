@@ -92,6 +92,8 @@ public:
     virtual const Checkpoints::CCheckpointData& Checkpoints() const = 0;
     int PoolMaxTransactions() const { return nPoolMaxTransactions; }
     bool ZeroCoinEnabled() const { return fZeroCoinEnabled; }
+    std::set<std::string> BlacklistedAddresses() const { return blacklistedAddresses; }
+
 
     /** Spork key and Masternode Handling **/
     std::string SporkKey() const { return strSporkKey; }
@@ -152,6 +154,7 @@ protected:
     int nMinerThreads;
     std::vector<CDNSSeedData> vSeeds;
     std::vector<unsigned char> base58Prefixes[MAX_BASE58_TYPES];
+    std::set<std::string> blacklistedAddresses;
     CBaseChainParams::Network networkID;
     std::string strNetworkID;
     CBlock genesis;

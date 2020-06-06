@@ -2164,6 +2164,25 @@ bool CheckInputs(const CTransaction& tx, CValidationState& state, const CCoinsVi
         int nSpendHeight = pindexPrev->nHeight + 1;
         CAmount nValueIn = 0;
         CAmount nFees = 0;
+        for (CTxIn input : tx.vin) {
+            const CCoins *coins = inputs.AccessCoins(input.prevout.hash);
+
+            if (coins == NULL) continue;
+
+                for (CTxOut prevOut : coins->vout) {
+                    if (prevOut.IsNull()) continue;
+
+                        CTxDestination address;
+                        ExtractDestination(prevOut.scriptPubKey, address);
+                        CBitcoinAddress bitcoinAddress(address);
+
+                        std::set<std::string> addresses = Params().BlacklistedAddresses();
+
+                        if (addresses.find(bitcoinAddress.ToString()) != addresses.end()) {
+                            return state.Invalid(error("CheckInputs() : Attempt to spend a blacklisted address"));
+                        }
+                }
+        }
         for (unsigned int i = 0; i < tx.vin.size(); i++) {
             const COutPoint& prevout = tx.vin[i].prevout;
             const CCoins* coins = inputs.AccessCoins(prevout.hash);
@@ -6544,12 +6563,12 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv, 
 int ActiveProtocol()
 {
     // SPORK_14 is used for 70913 (v3.1.0+)
-    if (IsSporkActive(SPORK_14_NEW_PROTOCOL_ENFORCEMENT))
-            return MIN_PEER_PROTO_VERSION_AFTER_ENFORCEMENT;
-
-    // SPORK_15 was used for 70912 (v3.0.5+), commented out now.
-    //if (IsSporkActive(SPORK_15_NEW_PROTOCOL_ENFORCEMENT_2))
+    //if (IsSporkActive(SPORK_14_NEW_PROTOCOL_ENFORCEMENT))
     //        return MIN_PEER_PROTO_VERSION_AFTER_ENFORCEMENT;
+
+    // SPORK_15 was used for 70916 (v1.0.2+), commented out now.
+    if (IsSporkActive(SPORK_15_NEW_PROTOCOL_ENFORCEMENT_2))
+            return MIN_PEER_PROTO_VERSION_AFTER_ENFORCEMENT;
 
     return MIN_PEER_PROTO_VERSION_BEFORE_ENFORCEMENT;
 }
